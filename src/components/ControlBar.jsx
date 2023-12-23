@@ -23,7 +23,7 @@ const ControlBar = () => {
   const addToDBHandler = async (value) => {
     try {
       const req = { data: value };
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${action}/`, {
+      const res = await fetch(`http://panda-db.us-west-2.elasticbeanstalk.com/api/${action}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
