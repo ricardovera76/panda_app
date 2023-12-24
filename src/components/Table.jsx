@@ -18,7 +18,7 @@ const Table = ({ data, category }) => {
 
   const updateHandler = async (data) => {
     try {
-      const res = await fetch(`http://panda-db.us-west-2.elasticbeanstalk.com/api/${category}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${category}/`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const Table = ({ data, category }) => {
 
   const deleteHandler = async (id) => {
     try {
-      const res = await fetch(`http://panda-db.us-west-2.elasticbeanstalk.com/api/${category}/?${category}_id=${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${category}/?${category}_id=${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
