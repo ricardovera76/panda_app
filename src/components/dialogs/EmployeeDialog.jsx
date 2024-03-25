@@ -79,7 +79,7 @@ const EmployeeDialog = ({
     isError: driversError,
   } = useQuery('drivers', async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/driver`
+      `https://panda-back.vercel.app/api/driver`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch drivers');
@@ -94,7 +94,7 @@ const EmployeeDialog = ({
     isError: routesError,
   } = useQuery('routes', async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/route`
+      `https://panda-back.vercel.app/api/route`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch routes');

@@ -15,7 +15,7 @@ const Home = () => {
   const { data: dbData, isLoading, isError } = useQuery(
     ['data', option],
     async () => {
-      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${option}`);
+      const req = await fetch(`https://panda-back.vercel.app/api/${option}`);
       if (!req.ok) {
         throw new Error(`Failed to fetch data. Status: ${req.status}`);
       }

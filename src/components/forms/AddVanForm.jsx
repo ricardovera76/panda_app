@@ -28,7 +28,7 @@ const AddVanForm = ({ closeModal, openModal, addHandler }) => {
   };
 
   const { data: driversData, isLoading: driversLoading, isError: driversError } = useQuery('drivers', async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/driver`);
+    const response = await fetch(`https://panda-back.vercel.app/api/driver`);
     if (!response.ok) {
       throw new Error('Failed to fetch drivers');
     }

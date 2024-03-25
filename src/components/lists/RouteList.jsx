@@ -12,7 +12,7 @@ const RouteList = ({ data, rowHandler }) => {
     isError: driversError,
   } = useQuery('drivers', async () => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/driver`
+      `https://panda-back.vercel.app/api/driver`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch drivers');

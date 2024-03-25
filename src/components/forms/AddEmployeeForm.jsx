@@ -51,7 +51,7 @@ const AddEmployeeForm = ({ closeModal, openModal, addHandler }) => {
 
 
   const { data: driversData, isLoading: driversLoading, isError: driversError } = useQuery('drivers', async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/driver`);
+    const response = await fetch(`https://panda-back.vercel.app/api/driver`);
     if (!response.ok) {
       throw new Error('Failed to fetch drivers');
     }
@@ -60,7 +60,7 @@ const AddEmployeeForm = ({ closeModal, openModal, addHandler }) => {
   });
 
   const { data: routesData, isLoading: routesLoading, isError: routesError } = useQuery('routes', async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/route`);
+    const response = await fetch(`https://panda-back.vercel.app/api/route`);
     if (!response.ok) {
       throw new Error('Failed to fetch routes');
     }
