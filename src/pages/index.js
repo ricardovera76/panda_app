@@ -1,37 +1,30 @@
 // pages/index.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import ControlBar from 'src/components/ControlBar';
 import Table from 'src/components/Table';
+import { useQuery } from 'react-query';
 
 const Home = () => {
   const [option, setOption] = useState('driver');
-  const [dbData, setDbData] = useState([{}]);
 
   const optionSelectionHandler = (value) => {
-    setDbData([{}]);
     setOption(value);
   };
 
-  useEffect(() => {
-    const fetchList = async () => {
-      try {
-        const req = await fetch(`https://panda-back.vercel.app/api/${option}`);
-        if (!req.ok) {
-          throw new Error(`Failed to fetch data. Status: ${req.status}`);
-        }
-        // Handle the response data here
-        const data = await req.json();
-        setDbData(data.data);
-      } catch (error) {
-        console.error(error);
+  const { data: dbData, isLoading, isError } = useQuery(
+    ['data', option],
+    async () => {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${option}`);
+      if (!req.ok) {
+        throw new Error(`Failed to fetch data. Status: ${req.status}`);
       }
-    };
+      const data = await req.json();
+      return data.data;
+    }
+  );
 
-    fetchList();
-  }, [option]);
-
-  const titleName = option === 'driver' ? "Drivers" : option === 'employee' ? "Empleados" : "Rutas"
+  const titleName = option === 'driver' ? "Drivers" : option === 'employee' ? "Empleados" : "Rutas";
 
   return (
     <Layout onOptionSelect={optionSelectionHandler}>
@@ -42,7 +35,9 @@ const Home = () => {
           </h1>
           <ControlBar />
         </div>
-      <Table data={dbData} category={option}/>
+        <div>{isLoading && <p>Loading...</p>}</div>
+        <div>{isError && <p>Error fetching data...</p>}</div>
+        <div>{!isError && !isLoading && <Table data={dbData} category={option}/>}</div>
       </div>
     </Layout>
   );

@@ -9,7 +9,7 @@ const EmployeeList = ({ data, rowHandler }) => {
     <>
       <thead>
         <tr>
-          <th className='py-2 px-4 border-b'>ID</th>
+          {/* <th className='py-2 px-4 border-b'>ID</th> */}
           <th className='py-2 px-4 border-b'>Name</th>
           <th className='py-2 px-4 border-b'>Shift</th>
           <th className='py-2 px-4 border-b'>Address</th>
@@ -22,7 +22,7 @@ const EmployeeList = ({ data, rowHandler }) => {
       <tbody>
         {data.map((item) => (
           <tr key={item.id} onClick={() => selectedRow(item)}>
-            <td className='py-2 px-4 border-b'>{item.id}</td>
+            {/* <td className='py-2 px-4 border-b'>{item.id}</td> */}
             <td className='py-2 px-4 border-b'>{item.name}</td>
             <td className='py-2 px-4 border-b'>{item.shift}</td>
             <td className='py-2 px-4 border-b'>{item.address}</td>

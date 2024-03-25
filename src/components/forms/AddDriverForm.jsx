@@ -1,11 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 const AddDriverForm = ({ closeModal, openModal, addHandler }) => {
   const dialogRef = useRef(null);
   const nameRef = useRef(null);
   const phoneRef = useRef(null);
   const addressRef = useRef(null);
-
   useEffect(() => {
     if (openModal) {
       dialogRef.current.showModal();
@@ -39,21 +38,21 @@ const AddDriverForm = ({ closeModal, openModal, addHandler }) => {
           <h2 className='text-2xl font-bold'>Agregar Driver</h2>
           <p>Nombre: </p>
           <input
-            type="text"
+            type='text'
             ref={nameRef}
-            className="w-full p-2 border rounded mb-4"
+            className='w-full p-2 border rounded mb-4'
           />
           <p>Telefono: </p>
           <input
-            type="text"
+            type='text'
             ref={phoneRef}
-            className="w-full p-2 border rounded mb-4"
+            className='w-full p-2 border rounded mb-4'
           />
           <p>Direccion: </p>
           <input
-            type="text"
+            type='text'
             ref={addressRef}
-            className="w-full p-2 border rounded mb-4"
+            className='w-full p-2 border rounded mb-4'
           />
 
           <div className='flex justify-end mt-4'>

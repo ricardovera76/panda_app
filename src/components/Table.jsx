@@ -28,7 +28,7 @@ const Table = ({ data, category }) => {
   const updateHandler = async (data) => {
     try {
       const res = await fetch(
-        `https://panda-back.vercel.app/api/${category}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/${category}/`,
         {
           method: 'PUT',
           headers: {
@@ -60,7 +60,7 @@ const Table = ({ data, category }) => {
   const deleteHandler = async (id) => {
     try {
       const res = await fetch(
-        `https://panda-back.vercel.app/api/${category}/?${category}_id=${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/${category}/?${category}_id=${id}`,
         {
           method: 'DELETE',
           headers: {
@@ -79,25 +79,52 @@ const Table = ({ data, category }) => {
     }
   };
 
-  const convertToCSV = () => {
-    const header = Object.keys(filteredData[0]);
-    const csv = [
-      header.join(','),
-      ...filteredData.map((row) => header.map((key) => row[key]).join(',')),
-    ].join('\n');
-
-    return csv;
+  const downloadCSV = async () => {
+    const inputValue = filterInputRef.current.value;
+    const selectValue = filterSelectRef.current.value;
+  
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/single/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: category,
+            data: {
+              lookup_value: inputValue,
+              lookup_type: selectValue,
+            },
+          }),
+        }
+      );
+  
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+  
+      // Convert the response to a Blob
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().split('T')[0];
+      link.download = `${category}_data_${formattedDate}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+  
+      setErrorMessage('');
+    } catch (error) {
+      console.error('Error:', error.message);
+      setErrorMessage('Failed to download data. Please try again.');
+    }
   };
-
-  const downloadCSV = () => {
-    const csvData = convertToCSV();
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'filtered_data.csv';
-    link.click();
-  };
-
+  
+  
   return (
     <div className='flex-1 overflow-x-auto overflow-y-scroll'>
       <div>
@@ -114,7 +141,7 @@ const Table = ({ data, category }) => {
         >
           {category === 'driver' && (
             <>
-              <option value='id'>ID de Driver</option>
+              {/* <option value='id'>ID de Driver</option> */}
               <option value='name'>Nombre de Driver</option>
               <option value='address'>Direccion de Driver</option>
               <option value='phone'>Numero de Driver</option>
@@ -122,7 +149,7 @@ const Table = ({ data, category }) => {
           )}
           {category === 'employee' && (
             <>
-              <option value='id'>ID de Empleado</option>
+              {/* <option value='id'>ID de Empleado</option> */}
               <option value='name'>Nombre de Empleado</option>
               <option value='shift'>Turno de Empleado</option>
               <option value='address'>Direccion de Empleado</option>
@@ -133,7 +160,7 @@ const Table = ({ data, category }) => {
           )}
           {category === 'route' && (
             <>
-              <option value='id'>ID de Ruta</option>
+              {/* <option value='id'>ID de Ruta</option> */}
               <option value='name'>Nombre de Ruta</option>
               <option value='descr'>Descripcion de Ruta</option>
               <option value='company'>Empresa de Ruta</option>

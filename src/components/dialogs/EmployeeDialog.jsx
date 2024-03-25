@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useQuery } from 'react-query';
 
 const EmployeeDialog = ({
   employeeData,
@@ -72,6 +73,36 @@ const EmployeeDialog = ({
     closeModal();
   };
 
+  const {
+    data: driversData,
+    isLoading: driversLoading,
+    isError: driversError,
+  } = useQuery('drivers', async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/driver`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch drivers');
+    }
+    const responseData = await response.json();
+    return responseData.data;
+  });
+
+  const {
+    data: routesData,
+    isLoading: routesLoading,
+    isError: routesError,
+  } = useQuery('routes', async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/route`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch routes');
+    }
+    const responseData = await response.json();
+    return responseData.data;
+  });
+
   return (
     <dialog
       ref={dialogRef}
@@ -104,11 +135,59 @@ const EmployeeDialog = ({
               </option>
             ))}
           </select>
-          <input
-            type='text'
-            ref={inputRef}
-            className='w-full p-2 border rounded mb-4'
-          />
+          {updateType !== 'dr' && updateType !== 'rt' && (
+            <input
+              type='text'
+              ref={inputRef}
+              className='w-full p-2 border rounded mb-4'
+            />
+          )}
+          {updateType === 'dr' && (
+            <div>
+              <label htmlFor='driverSelect'>Seleccione el conductor:</label>
+              {driversLoading ? (
+                <p>Loading...</p>
+              ) : driversError ? (
+                <p>Error loading drivers</p>
+              ) : (
+                <select
+                  id='driverSelect'
+                  ref={inputRef}
+                  className='w-full p-2 border rounded mt-1'
+                >
+                  <option value=''>Seleccione un conductor</option>
+                  {driversData.map((driver) => (
+                    <option key={driver.id} value={driver.id}>
+                      {driver.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          )}
+          {updateType === 'rt' && (
+            <div>
+              <label htmlFor='routeSelect'>Seleccione la ruta:</label>
+              {routesLoading ? (
+                <p>Loading...</p>
+              ) : routesError ? (
+                <p>Error loading routes</p>
+              ) : (
+                <select
+                  id='routeSelect'
+                  ref={inputRef}
+                  className='w-full p-2 border rounded mt-1'
+                >
+                  <option value=''>Seleccione una ruta</option>
+                  {routesData.map((route) => (
+                    <option key={route.id} value={route.id}>
+                      {route.descr}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+          )}
           <div className='flex justify-end mt-4'>
             <button
               onClick={handleDeleteEmployee}

@@ -110,14 +110,14 @@ const DriverDialog = ({
           )}
 
           <label htmlFor='routeSelect' className='block mt-4'>
-            Seleccion el tipo de actualizacion:
+            Seleccione el tipo de actualizacion:
           </label>
           <select
             id='routeSelect'
             onChange={handleUpdateTypeChange}
             className='w-full p-2 border rounded mt-1'
           >
-            <option value=''>Select a Route</option>
+            <option value=''>Seleccione una opcion</option>
             {updateOptions?.map((opt) => (
               <option key={opt.name} value={opt.value}>
                 {opt.name}

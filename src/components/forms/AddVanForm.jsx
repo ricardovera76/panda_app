@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useQuery } from 'react-query';
 
 const AddVanForm = ({ closeModal, openModal, addHandler }) => {
   const dialogRef = useRef(null);
@@ -26,6 +27,15 @@ const AddVanForm = ({ closeModal, openModal, addHandler }) => {
     closeModal();
   };
 
+  const { data: driversData, isLoading: driversLoading, isError: driversError } = useQuery('drivers', async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/driver`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch drivers');
+    }
+    const responseData = await response.json();
+    return responseData.data;
+  });
+
   return (
     <dialog
       ref={dialogRef}
@@ -40,12 +50,24 @@ const AddVanForm = ({ closeModal, openModal, addHandler }) => {
             ref={idRef}
             className='w-full p-2 border rounded mb-4'
           />
-          <p>ID de Driver: </p>
-          <input
-            type='number'
-            ref={driverIdRef}
-            className='w-full p-2 border rounded mb-4'
-          />
+
+          <div>
+            <label htmlFor='driverSelect'>Seleccione el conductor:</label>
+            {driversLoading ? (
+              <p>Loading...</p>
+            ) : driversError ? (
+              <p>Error loading drivers</p>
+            ) : (
+              <select id='driverSelect' ref={driverIdRef} className='w-full p-2 border rounded mt-1'>
+                <option value=''>Seleccione un conductor</option>
+                {driversData.map(driver => (
+                  <option key={driver.id} value={driver.id}>
+                    {driver.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
 
           <div className='flex justify-end mt-4'>
             <button
